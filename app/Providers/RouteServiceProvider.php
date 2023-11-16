@@ -10,20 +10,11 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
     public const HOME = '/dashboard';
+    public const ADMIN_HOME = '/admin/dashboard';
+    public const EMPLOYEE_HOME = '/employee/dashboard';
+    public const OWNER_HOME = '/owner/dashboard';
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->configureRateLimiting();
@@ -33,16 +24,25 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::prefix('/')
+                ->as('user.')
+                ->middleware('web')
                 ->group(base_path('routes/web.php'));
+            Route::prefix('admin')
+                ->as('admin.')
+                ->middleware('web')
+                ->group(base_path('routes/admin.php'));
+            Route::prefix('employee')
+                ->as('employee.')
+                ->middleware('web')
+                ->group(base_path('routes/employee.php'));
+            Route::prefix('owner')
+                ->as('owner.')
+                ->middleware('web')
+                ->group(base_path('routes/owner.php'));
         });
     }
 
-    /**
-     * Configure the rate limiters for the application.
-     *
-     * @return void
-     */
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
