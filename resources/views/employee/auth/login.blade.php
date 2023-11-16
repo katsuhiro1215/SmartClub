@@ -1,47 +1,99 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="ja">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+<head>
+    @include('employee.inc.head')
+</head>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+<body class="authentication-bg authentication-bg-pattern">
+
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+                    <div class="card bg-pattern">
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <div class="auth-logo">Smart Sprouts</div>
+                                <p class="text-muted mb-4 mt-3">{{__('オーナー専用画面にアクセスするには、メールアドレスとパスワードを入力してください。')}}</p>
+                            </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form method="POST" action="{{ route('employee.login') }}">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">{{ __('メールアドレス') }}</label>
+                                    <input class="form-control" type="email" id="email" name="email"
+                                        value="{{ old('email') }}" placeholder="Enter your email" required autofocus
+                                        autocomplete="username">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">{{ __('パスワード') }}</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Enter your password" required autocomplete="current-password">
+                                        <div class="input-group-text" data-password="false">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="remmber_me" name="remember">
+                                        <label class="form-check-label"
+                                            for="remmber_me">{{ __('Remember me') }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="text-center d-grid">
+                                    <button class="btn btn-primary" type="submit">{{ __('Log In') }}</button>
+                                </div>
+
+                            </form>
+
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            @if (Route::has('employee.password.request'))
+                                <p> <a href="{{ route('employee.password.request') }}"
+                                        class="text-white-50 ms-1">{{ __('パスワードをお忘れですか？') }}</a></p>
+                            @endif
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
         </div>
+        <!-- end container -->
+    </div>
+    <!-- end page -->
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <footer class="footer footer-alt">
+        2023 -
+        <script>
+            document.write(new Date().getFullYear())
+        </script> &copy; Smart Sprouts theme by <a href="https://katsucode.jp/" class="text-white-50">Katsucode</a>
+    </footer>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+    @include('employee.inc.script')
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+</body>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ml-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</html>

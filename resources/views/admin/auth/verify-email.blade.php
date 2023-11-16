@@ -1,31 +1,72 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
+<!DOCTYPE html>
+<html lang="ja">
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+<head>
+    @include('admin.inc.head')
+</head>
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+<body class="authentication-bg authentication-bg-pattern">
 
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+                    <div class="card bg-pattern">
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <div class="auth-logo">Smart Sprouts</div>
+                                <p class="text-muted mb-4 mt-3">
+                                    {{ __('ご登録ありがとうございます！登録を始める前に、先ほどお送りしたリンクをクリックしてメールアドレスを確認していただけますか？もしメールを受け取らなかった場合は、喜んで別のメールをお送りします。') }}
+                                </p>
+                                @if (session('status') == 'verification-link-sent')
+                                    <p class="text-muted mb-4 mt-3">
+                                        {{ __('会員登録時に入力されたメールアドレスに、新しい認証リンクが送信されました。') }}
+                                    </p>
+                                @endif
+                            </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form method="POST" action="{{ route('admin.verification.send') }}">
+                                @csrf
+                                <div class="text-center d-grid">
+                                    <button class="btn btn-primary"
+                                        type="submit">{{ __('Resend Verification Email') }}</button>
+                                </div>
+                            </form>
+                            <form method="POST" action="{{ route('admin.logout') }}">
+                                @csrf
+                                <button class="btn btn-primary" type="submit">{{ __('Log Out') }}</button>
+                            </form>
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+                </div> <!-- end col -->
             </div>
-        </form>
-
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
-            </button>
-        </form>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
     </div>
-</x-guest-layout>
+    <!-- end page -->
+
+    <footer class="footer footer-alt">
+        2023 -
+        <script>
+            document.write(new Date().getFullYear())
+        </script> &copy; Smart Sprouts theme by <a href="https://katsucode.jp/"
+            class="text-white-50">Katsucode</a>
+    </footer>
+
+    @include('admin.inc.script')
+
+</body>
+
+</html>

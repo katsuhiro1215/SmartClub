@@ -1,27 +1,67 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    @include('admin.inc.head')
+</head>
+
+<body class="authentication-bg authentication-bg-pattern">
+
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+                    <div class="card bg-pattern">
+                        <div class="card-body p-4">
+                            <div class="text-center w-75 m-auto">
+                                <div class="auth-logo">Smart Sprouts</div>
+                                <p class="text-muted mb-4 mt-3">{{__('これはアプリケーションの安全なエリアです。続行する前にパスワードを確認してください。')}}</p>
+                            </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <form method="POST" action="{{ route('admin.password.confirm') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">{{ __('パスワード') }}</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Enter your password" required autocomplete="current-password">
+                                        <div class="input-group-text" data-password="false">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center d-grid">
+                                    <button class="btn btn-primary" type="submit">{{ __('Confirm') }}</button>
+                                </div>
+                            </form>
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
     </div>
+    <!-- end page -->
 
-    <form method="POST" action="{{ route('password.confirm') }}">
-        @csrf
+    <footer class="footer footer-alt">
+        2023 -
+        <script>
+            document.write(new Date().getFullYear())
+        </script> &copy; Smart Sprouts theme by <a href="https://katsucode.jp/" class="text-white-50">Katsucode</a>
+    </footer>
 
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
+    @include('admin.inc.script')
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+</body>
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</html>
